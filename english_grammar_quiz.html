@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Simple "To Be" Grammar Quiz</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti for celebrations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+        .blank-select {
+            transition: all 0.2s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236B7280%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.6rem top 50%;
+            background-size: 0.65rem auto;
+            padding-right: 1.8rem;
+        }
+        .blank-select.correct {
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+            color: #15803d !important;
+            font-weight: 700;
+        }
+        .blank-select.incorrect {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #b91c1c !important;
+            font-weight: 700;
+        }
+        .blank-select.unanswered {
+            border-color: #f59e0b !important;
+            background-color: #fffbeb !important;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3);
+            animation: pulse-warn 1.2s infinite;
+        }
+        @keyframes pulse-warn {
+            0%, 100% { border-color: #f59e0b; }
+            50% { border-color: #d97706; }
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col justify-between bg-amber-50/30">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-amber-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 text-white flex items-center justify-center font-bold text-2xl shadow-md shadow-orange-200 transform -rotate-3">
+                    🏆
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-slate-900 text-lg leading-tight flex items-center gap-2">
+                        Grammar Champions <span class="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">Primary Level</span>
+                    </h1>
+                    <p class="text-xs text-slate-500">Was, Were, Wasn't, Weren't</p>
+                </div>
+            </div>
+
+            <!-- Score & Progress pill -->
+            <div class="flex items-center space-x-3">
+                <div id="scoreBadge" class="flex items-center bg-amber-100/80 text-amber-900 px-3.5 py-1.5 rounded-full text-xs font-bold border border-amber-200">
+                    <span class="mr-1.5 text-base">✏️</span>
+                    <span>Answered: <span id="answeredCount" class="text-amber-700 font-black">0</span> / 13</span>
+                </div>
+                <button id="quickHelpBtn" onclick="toggleGrammarGuide()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl font-bold transition flex items-center">
+                    <i class="fa-regular fa-lightbulb text-amber-500 mr-1.5 text-sm"></i> Help Rules
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 py-6 w-full flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Side Reference Panel (Grammar Rules) -->
+        <aside id="grammarGuide" class="hidden lg:block lg:col-span-4 space-y-4">
+            <div class="bg-white p-5 rounded-3xl border-2 border-amber-200 shadow-sm sticky top-20">
+                <div class="flex items-center justify-between border-b border-amber-100 pb-3 mb-3">
+                    <h2 class="font-black text-amber-900 text-base flex items-center">
+                        <span class="mr-2 text-xl">💡</span> Quick Helper Guide
+                    </h2>
+                    <span class="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">Past Simple</span>
+                </div>
+
+                <div class="space-y-3 text-xs leading-relaxed">
+                    <!-- Positive -->
+                    <div class="bg-blue-50 p-3 rounded-2xl border border-blue-200">
+                        <p class="font-bold text-blue-900 mb-1 flex items-center gap-1">
+                            <span>✅</span> Affirmative (+)
+                        </p>
+                        <ul class="space-y-1 text-slate-700">
+                            <li>• <strong>I / He / She / It</strong> ➡️ <span class="font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">was</span></li>
+                            <li>• <strong>You / We / They</strong> ➡️ <span class="font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">were</span></li>
+                            <li>• <em>There <span class="text-blue-600 font-bold">was</span> judo (1 item/uncountable)</em></li>
+                            <li>• <em>There <span class="text-blue-600 font-bold">were</span> sports (plural)</em></li>
+                        </ul>
+                    </div>
+
+                    <!-- Negative -->
+                    <div class="bg-red-50 p-3 rounded-2xl border border-red-200">
+                        <p class="font-bold text-red-900 mb-1 flex items-center gap-1">
+                            <span>❌</span> Negative (-)
+                        </p>
+                        <ul class="space-y-1 text-slate-700">
+                            <li>• <strong>I / He / She / It</strong> ➡️ <span class="font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded">wasn't</span></li>
+                            <li>• <strong>You / We / They</strong> ➡️ <span class="font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded">weren't</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Questions -->
+                    <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200">
+                        <p class="font-bold text-amber-900 mb-1 flex items-center gap-1">
+                            <span>❓</span> Questions (?)
+                        </p>
+                        <ul class="space-y-1 text-slate-700">
+                            <li>• <span class="font-bold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded">Was</span> + I / he / she / it ...?</li>
+                            <li>• <span class="font-bold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded">Were</span> + you / we / they ...?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Quiz Main Section -->
+        <section class="lg:col-span-8 space-y-6">
+
+            <!-- Primary School Banner with Sports Illustrations -->
+            <div class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="space-y-2 text-center md:text-left">
+                        <span class="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-yellow-200">
+                            🎯 Fill in all 13 blanks
+                        </span>
+                        <h2 class="text-2xl font-black">At the Sports Show! 🏟️</h2>
+                        <p class="text-sm text-blue-100 leading-relaxed max-w-md">
+                            Read the conversation between <strong>Max</strong> and <strong>Tom</strong>. Choose the correct word (<code class="bg-white/20 px-1.5 py-0.5 rounded text-yellow-200 font-mono">was</code>, <code class="bg-white/20 px-1.5 py-0.5 rounded text-yellow-200 font-mono">were</code>, <code class="bg-white/20 px-1.5 py-0.5 rounded text-yellow-200 font-mono">wasn't</code>, or <code class="bg-white/20 px-1.5 py-0.5 rounded text-yellow-200 font-mono">weren't</code>) for every drop-down box!
+                        </p>
+                    </div>
+
+                    <!-- Sports Illustrations Graphic Badges -->
+                    <div class="flex gap-2 items-center justify-center bg-white/10 p-3 rounded-2xl backdrop-blur-sm border border-white/20 shadow-inner">
+                        <div class="text-center p-2 bg-white/10 rounded-xl">
+                            <span class="text-3xl block">🥋</span>
+                            <span class="text-[10px] font-bold text-yellow-200">Judo</span>
+                        </div>
+                        <div class="text-center p-2 bg-white/10 rounded-xl">
+                            <span class="text-3xl block">🧗</span>
+                            <span class="text-[10px] font-bold text-yellow-200">Climbing</span>
+                        </div>
+                        <div class="text-center p-2 bg-white/10 rounded-xl">
+                            <span class="text-3xl block">🚴</span>
+                            <span class="text-[10px] font-bold text-yellow-200">Cycling</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dialogue Passage Container -->
+            <div class="bg-white rounded-3xl border-2 border-slate-200 p-6 sm:p-8 shadow-sm text-base sm:text-lg leading-loose text-slate-800 space-y-5 relative">
+                
+                <!-- Character Avatar Header Badges -->
+                <div class="flex items-center gap-4 pb-4 border-b border-slate-100 mb-2">
+                    <div class="flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-200">
+                        <span class="text-xl">👦🏻</span>
+                        <span class="text-xs font-black text-blue-700">Max (The Sports Fan)</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
+                        <span class="text-xl">👦🏽</span>
+                        <span class="text-xs font-black text-emerald-700">Tom (His Friend)</span>
+                    </div>
+                </div>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-blue-600 font-extrabold flex items-center gap-1">👦🏻 Max:</strong> 
+                    <select id="q1" onchange="clearUnansweredWarning(1); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[1] ---</option>
+                        <option value="Was">Was</option>
+                        <option value="Were">Were</option>
+                        <option value="Wasn't">Wasn't</option>
+                        <option value="Weren't">Weren't</option>
+                    </select>
+                    you at the sports show last night?
+                </p>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-emerald-600 font-extrabold flex items-center gap-1">👦🏽 Tom:</strong> 
+                    No, I 
+                    <select id="q2" onchange="clearUnansweredWarning(2); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[2] ---</option>
+                        <option value="was">was</option>
+                        <option value="were">were</option>
+                        <option value="wasn't">wasn't</option>
+                        <option value="weren't">weren't</option>
+                    </select>. 
+                    <select id="q3" onchange="clearUnansweredWarning(3); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[3] ---</option>
+                        <option value="Was">Was</option>
+                        <option value="Were">Were</option>
+                        <option value="Wasn't">Wasn't</option>
+                        <option value="Weren't">Weren't</option>
+                    </select>
+                    it good?
+                </p>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-blue-600 font-extrabold flex items-center gap-1">👦🏻 Max:</strong> 
+                    Good? It 
+                    <select id="q4" onchange="clearUnansweredWarning(4); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[4] ---</option>
+                        <option value="was">was</option>
+                        <option value="were">were</option>
+                        <option value="wasn't">wasn't</option>
+                        <option value="weren't">weren't</option>
+                    </select>
+                    great! Becky and Raj 
+                    <select id="q5" onchange="clearUnansweredWarning(5); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[5] ---</option>
+                        <option value="was">was</option>
+                        <option value="were">were</option>
+                        <option value="wasn't">wasn't</option>
+                        <option value="weren't">weren't</option>
+                    </select>
+                    there, too.
+                </p>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-emerald-600 font-extrabold flex items-center gap-1">👦🏽 Tom:</strong> 
+                    Really?
+                </p>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-blue-600 font-extrabold flex items-center gap-1">👦🏻 Max:</strong> 
+                    Yes. There 
+                    <select id="q6" onchange="clearUnansweredWarning(6); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[6] ---</option>
+                        <option value="was">was</option>
+                        <option value="were">were</option>
+                        <option value="wasn't">wasn't</option>
+                        <option value="weren't">weren't</option>
+                    </select>
+                    a lot of different sports to try.
+                </p>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-emerald-600 font-extrabold flex items-center gap-1">👦🏽 Tom:</strong> 
+                    No way! What sports?
+                </p>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-blue-600 font-extrabold flex items-center gap-1">👦🏻 Max:</strong> 
+                    Well, there 
+                    <select id="q7" onchange="clearUnansweredWarning(7); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[7] ---</option>
+                        <option value="was">was</option>
+                        <option value="were">were</option>
+                        <option value="wasn't">wasn't</option>
+                        <option value="weren't">weren't</option>
+                    </select>
+                    judo 🥋. Then I did some climbing 🧗 and cycling 🚴.
+                </p>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-emerald-600 font-extrabold flex items-center gap-1">👦🏽 Tom:</strong> 
+                    That sounds great!
+                </p>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-blue-600 font-extrabold flex items-center gap-1">👦🏻 Max:</strong> 
+                    I know. It 
+                    <select id="q8" onchange="clearUnansweredWarning(8); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[8] ---</option>
+                        <option value="was">was</option>
+                        <option value="were">were</option>
+                        <option value="wasn't">wasn't</option>
+                        <option value="weren't">weren't</option>
+                    </select>
+                    so cool, but there 
+                    <select id="q9" onchange="clearUnansweredWarning(9); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[9] ---</option>
+                        <option value="was">was</option>
+                        <option value="were">were</option>
+                        <option value="wasn't">wasn't</option>
+                        <option value="weren't">weren't</option>
+                    </select>
+                    much time to talk to people. There 
+                    <select id="q10" onchange="clearUnansweredWarning(10); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[10] ---</option>
+                        <option value="was">was</option>
+                        <option value="were">were</option>
+                        <option value="wasn't">wasn't</option>
+                        <option value="weren't">weren't</option>
+                    </select>
+                    any famous climbers or cyclists, but there 
+                    <select id="q11" onchange="clearUnansweredWarning(11); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[11] ---</option>
+                        <option value="was">was</option>
+                        <option value="were">were</option>
+                        <option value="wasn't">wasn't</option>
+                        <option value="weren't">weren't</option>
+                    </select>
+                    a judo star there.
+                </p>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-emerald-600 font-extrabold flex items-center gap-1">👦🏽 Tom:</strong> 
+                    <select id="q12" onchange="clearUnansweredWarning(12); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[12] ---</option>
+                        <option value="Was">Was</option>
+                        <option value="Were">Were</option>
+                        <option value="Wasn't">Wasn't</option>
+                        <option value="Weren't">Weren't</option>
+                    </select>
+                    it an Olympic champion?
+                </p>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-blue-600 font-extrabold flex items-center gap-1">👦🏻 Max:</strong> 
+                    No, it 
+                    <select id="q13" onchange="clearUnansweredWarning(13); updateProgress();" class="blank-select inline-block mx-1 py-1 px-3 text-base border-2 border-slate-300 rounded-xl bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">[13] ---</option>
+                        <option value="was">was</option>
+                        <option value="were">were</option>
+                        <option value="wasn't">wasn't</option>
+                        <option value="weren't">weren't</option>
+                    </select>
+                    me! 🥋
+                </p>
+
+                <p class="flex flex-wrap items-center gap-1.5">
+                    <strong class="text-emerald-600 font-extrabold flex items-center gap-1">👦🏽 Tom:</strong> 
+                    Ha, ha! Very funny, Max. 😂
+                </p>
+
+            </div>
+
+            <!-- Incomplete Answer Warning Banner -->
+            <div id="incompleteWarning" class="hidden bg-amber-50 border-2 border-amber-400 p-4 rounded-2xl flex items-center gap-3 text-amber-900 shadow-sm animate-bounce">
+                <span class="text-3xl">⚠️</span>
+                <div>
+                    <h4 class="font-extrabold text-sm">Please answer all questions first!</h4>
+                    <p class="text-xs text-amber-800">You have <strong id="missingCount" class="underline">0</strong> unanswered blank(s) highlighted in orange yellow above.</p>
+                </div>
+            </div>
+
+            <!-- Controls & Submit Bar -->
+            <div class="bg-white rounded-3xl border-2 border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+                <button onclick="resetQuiz()" class="w-full sm:w-auto px-5 py-3 rounded-2xl border-2 border-slate-200 text-slate-700 font-bold hover:bg-slate-100 transition flex items-center justify-center space-x-2 text-sm">
+                    <i class="fa-solid fa-rotate-right text-slate-400"></i>
+                    <span>Reset Quiz</span>
+                </button>
+
+                <div class="flex items-center space-x-3 w-full sm:w-auto">
+                    <button id="explanationToggleBtn" onclick="toggleExplanations()" class="hidden w-full sm:w-auto px-5 py-3 rounded-2xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold transition items-center justify-center space-x-2 text-sm">
+                        <i class="fa-solid fa-lightbulb text-amber-600"></i>
+                        <span>View Explanations</span>
+                    </button>
+
+                    <button id="checkBtn" onclick="checkAnswers()" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-base transition shadow-lg shadow-blue-200 flex items-center justify-center space-x-2 transform active:scale-95">
+                        <i class="fa-solid fa-circle-check text-lg"></i>
+                        <span>Check Answers</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Banner (Initially Hidden) -->
+            <div id="resultBanner" class="hidden rounded-3xl p-6 text-center border-2 transition-all duration-300 shadow-md">
+                <div id="resultIcon" class="text-5xl mb-2"></div>
+                <h3 id="resultTitle" class="text-2xl font-black mb-1"></h3>
+                <p id="resultSubtitle" class="text-sm font-medium text-slate-600 mb-4"></p>
+
+                <div class="inline-flex items-center px-6 py-2.5 bg-white rounded-full border-2 border-amber-200 shadow-xs font-black text-xl text-slate-800">
+                    Score: <span id="finalScore" class="mx-2 text-3xl font-black text-blue-600">0</span> / 13 ⭐
+                </div>
+            </div>
+
+            <!-- Explanations Drawer/Accordion (Initially Hidden) -->
+            <div id="explanationsSection" class="hidden bg-white rounded-3xl border-2 border-slate-200 p-6 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h3 class="font-black text-slate-800 text-base flex items-center">
+                        <i class="fa-solid fa-square-check text-emerald-500 mr-2"></i> Detailed Explanations
+                    </h3>
+                    <span class="text-xs bg-slate-100 px-2 py-1 rounded-md font-bold text-slate-500">Answer Key</span>
+                </div>
+
+                <div id="explanationsList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-8">
+        <div class="max-w-5xl mx-auto px-4 text-center text-xs text-slate-400 font-medium">
+            Grammar Champions • Primary English Past Simple (<code class="text-slate-600 font-mono">was / were / wasn't / weren't</code>)
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Answer dataset with precise answers and pedagogical rules
+        const quizData = [
+            { id: 1, answer: "Were", rule: "Question form starting with subject 'you'.", context: "Were you at the sports show...?" },
+            { id: 2, answer: "wasn't", rule: "Short negative response for subject 'I'.", context: "No, I wasn't." },
+            { id: 3, answer: "Was", rule: "Question form with singular subject 'it'.", context: "Was it good?" },
+            { id: 4, answer: "was", rule: "Singular affirmative past tense for subject 'it'.", context: "It was great!" },
+            { id: 5, answer: "were", rule: "Plural subject ('Becky and Raj' = They).", context: "Becky and Raj were there..." },
+            { id: 6, answer: "were", rule: "Plural noun follows ('a lot of different sports').", context: "There were a lot of..." },
+            { id: 7, answer: "was", rule: "Uncountable singular noun follows ('judo').", context: "There was judo." },
+            { id: 8, answer: "was", rule: "Singular affirmative past tense for subject 'it'.", context: "It was so cool..." },
+            { id: 9, answer: "wasn't", rule: "Negative context + uncountable noun ('much time').", context: "there wasn't much time..." },
+            { id: 10, answer: "weren't", rule: "Negative context ('any') + plural noun ('famous climbers').", context: "There weren't any famous..." },
+            { id: 11, answer: "was", rule: "Singular affirmative noun follows ('a judo star').", context: "there was a judo star..." },
+            { id: 12, answer: "Was", rule: "Question form starting with singular subject 'it'.", context: "Was it an Olympic champion?" },
+            { id: 13, answer: "was", rule: "Singular affirmative response for 'it' (joke punchline).", context: "No, it was me!" }
+        ];
+
+        let hasSubmitted = false;
+
+        // Clear warning highlight when student selects an option
+        function clearUnansweredWarning(id) {
+            const el = document.getElementById(`q${id}`);
+            if (el && el.value !== "") {
+                el.classList.remove('unanswered');
+            }
+        }
+
+        // Track user interaction progress
+        function updateProgress() {
+            let answered = 0;
+            quizData.forEach(item => {
+                const el = document.getElementById(`q${item.id}`);
+                if (el && el.value !== "") {
+                    answered++;
+                }
+            });
+            document.getElementById('answeredCount').innerText = answered;
+
+            if (answered === quizData.length) {
+                document.getElementById('incompleteWarning').classList.add('hidden');
+            }
+        }
+
+        // Validate and Grade (Requires all 13 answered)
+        function checkAnswers() {
+            let emptyIds = [];
+
+            // Check for any unanswered boxes first
+            quizData.forEach(item => {
+                const select = document.getElementById(`q${item.id}`);
+                if (!select || select.value.trim() === "") {
+                    emptyIds.push(item.id);
+                    select.classList.add('unanswered');
+                } else {
+                    select.classList.remove('unanswered');
+                }
+            });
+
+            // If incomplete, stop & prompt user
+            if (emptyIds.length > 0) {
+                const warningBox = document.getElementById('incompleteWarning');
+                document.getElementById('missingCount').innerText = emptyIds.length;
+                warningBox.classList.remove('hidden');
+                
+                // Focus on first missing box
+                const firstMissing = document.getElementById(`q${emptyIds[0]}`);
+                if (firstMissing) {
+                    firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstMissing.focus();
+                }
+                return;
+            }
+
+            // Hide incomplete warning if all answered
+            document.getElementById('incompleteWarning').classList.add('hidden');
+
+            let score = 0;
+            hasSubmitted = true;
+
+            quizData.forEach(item => {
+                const select = document.getElementById(`q${item.id}`);
+                const userVal = select.value.trim();
+
+                // Check answer (correct green, wrong red)
+                if (userVal.toLowerCase() === item.answer.toLowerCase()) {
+                    score++;
+                    select.classList.remove('incorrect', 'unanswered');
+                    select.classList.add('correct');
+                } else {
+                    select.classList.remove('correct', 'unanswered');
+                    select.classList.add('incorrect');
+                }
+            });
+
+            // Display Results Banner
+            const banner = document.getElementById('resultBanner');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultSubtitle = document.getElementById('resultSubtitle');
+            const finalScore = document.getElementById('finalScore');
+
+            finalScore.innerText = score;
+            banner.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-300', 'bg-blue-50', 'border-blue-300', 'bg-amber-50', 'border-amber-300');
+
+            if (score === 13) {
+                banner.classList.add('bg-emerald-50', 'border-emerald-300', 'text-emerald-900');
+                resultIcon.innerHTML = '🌟 🏆 🥇';
+                resultTitle.innerText = "Perfect 10/10 Champion!";
+                resultSubtitle.innerText = "Woohoo! You got every single question right! Fantastic grammar skills!";
+                
+                try {
+                    confetti({
+                        particleCount: 120,
+                        spread: 80,
+                        origin: { y: 0.6 }
+                    });
+                } catch(e) {}
+
+            } else if (score >= 9) {
+                banner.classList.add('bg-blue-50', 'border-blue-300', 'text-blue-900');
+                resultIcon.innerHTML = '⭐ 👏 🥈';
+                resultTitle.innerText = "Great Job, Super Star!";
+                resultSubtitle.innerText = "You did really well! Check the answers below to see your few small mistakes.";
+            } else {
+                banner.classList.add('bg-amber-50', 'border-amber-300', 'text-amber-900');
+                resultIcon.innerHTML = '💪 📚 🥉';
+                resultTitle.innerText = "Good Practice Effort!";
+                resultSubtitle.innerText = "Review the explanations below and try again to get all 13 correct!";
+            }
+
+            // Show explanation button
+            document.getElementById('explanationToggleBtn').classList.remove('hidden');
+            document.getElementById('explanationToggleBtn').classList.add('flex');
+
+            // Build explanation list
+            buildExplanationsList();
+            
+            // Scroll to result
+            banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Build list of detailed explanations
+        function buildExplanationsList() {
+            const container = document.getElementById('explanationsList');
+            container.innerHTML = '';
+
+            quizData.forEach(item => {
+                const select = document.getElementById(`q${item.id}`);
+                const userVal = select.value || "None";
+                const isCorrect = userVal.toLowerCase() === item.answer.toLowerCase();
+
+                const card = document.createElement('div');
+                card.className = `p-3.5 rounded-2xl border-2 text-xs leading-relaxed ${
+                    isCorrect ? 'bg-emerald-50/70 border-emerald-200' : 'bg-red-50/70 border-red-200'
+                }`;
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="font-black ${isCorrect ? 'text-emerald-800' : 'text-red-800'} text-sm">
+                            Blank [${item.id}]: <code class="px-2 py-0.5 rounded-md ${isCorrect ? 'bg-emerald-200' : 'bg-red-200'} font-bold">${item.answer}</code>
+                        </span>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full font-black ${
+                            isCorrect ? 'bg-emerald-200 text-emerald-900' : 'bg-red-200 text-red-900'
+                        }">
+                            ${isCorrect ? '✅ Correct' : '❌ Your choice: ' + userVal}
+                        </span>
+                    </div>
+                    <p class="text-slate-700 mb-1"><strong>Context:</strong> "${item.context}"</p>
+                    <p class="text-slate-600"><strong>Rule:</strong> ${item.rule}</p>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // Toggle explanation section visibility
+        function toggleExplanations() {
+            const sec = document.getElementById('explanationsSection');
+            if (sec.classList.contains('hidden')) {
+                sec.classList.remove('hidden');
+                sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                sec.classList.add('hidden');
+            }
+        }
+
+        // Toggle Quick Grammar Guide
+        function toggleGrammarGuide() {
+            const guide = document.getElementById('grammarGuide');
+            guide.classList.toggle('hidden');
+        }
+
+        // Reset all inputs and state
+        function resetQuiz() {
+            quizData.forEach(item => {
+                const select = document.getElementById(`q${item.id}`);
+                if (select) {
+                    select.value = "";
+                    select.classList.remove('correct', 'incorrect', 'unanswered');
+                }
+            });
+
+            hasSubmitted = false;
+            document.getElementById('answeredCount').innerText = "0";
+            document.getElementById('resultBanner').classList.add('hidden');
+            document.getElementById('incompleteWarning').classList.add('hidden');
+            document.getElementById('explanationsSection').classList.add('hidden');
+            document.getElementById('explanationToggleBtn').classList.add('hidden');
+            document.getElementById('explanationToggleBtn').classList.remove('flex');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
